@@ -45,24 +45,4 @@ public class UnitController
             currentUnit.position.x += tileWidth;
         }
     }
-
-    public void moveUnitUp()
-    {
-        currentUnit.position.y += tileHeight;
-    }
-
-    public void moveUnitDown()
-    {
-        currentUnit.position.y -= tileHeight;
-    }
-
-    public void moveUnitLeft()
-    {
-        currentUnit.position.x -= tileWidth;
-    }
-
-    public void moveUnitRight()
-    {
-        currentUnit.position.x += tileWidth;
-    }
 }

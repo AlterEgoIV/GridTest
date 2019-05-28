@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Tile extends GameObject
 {
-    private int column, row;
+    public int column, row;
 
     public Tile(Vector2 position, float width, float height, int column, int row, Shape shape)
     {

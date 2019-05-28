@@ -22,9 +22,12 @@ public class GridTest extends ApplicationAdapter implements InputProcessor
 		grid = new Grid(10, 10, Gdx.graphics.getWidth() / 10f, Gdx.graphics.getHeight() / 10f, inputState);
 		renderer = new Renderer();
 
-		for(Tile tile : grid.tiles)
+		for(int i = 0; i < grid.columns; ++i)
 		{
-			renderer.addShape(tile.shape);
+			for(int j = 0; j < grid.rows; ++j)
+			{
+				renderer.addShape(grid.tiles[i][j].shape);
+			}
 		}
 
 		for(Unit unit : grid.units)
