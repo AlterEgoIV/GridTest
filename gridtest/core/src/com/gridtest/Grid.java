@@ -20,7 +20,6 @@ public class Grid
     public int columns, rows;
     public float tileWidth, tileHeight;
     public Tile[][] tiles;
-    private List<Tile> activeTiles;
 
     public Grid(int columns, int rows, float tileWidth, float tileHeight, InputState inputState)
     {
@@ -30,7 +29,6 @@ public class Grid
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
         this.tiles = new Tile[columns][rows];
-        this.activeTiles = new ArrayList<Tile>();
 
         for(int i = 0; i < columns; ++i)
         {
@@ -52,7 +50,7 @@ public class Grid
     {
         unitController.update();
 
-        setActiveTiles();
+        List<Tile> activeTiles = getActiveTiles();
 
         for(Tile tile : activeTiles)
         {
@@ -60,30 +58,37 @@ public class Grid
         }
     }
 
-    private void setActiveTiles()
+    private List<Tile> getActiveTiles()
     {
         Tile startTile = activeUnit.startTile;
         int movement = activeUnit.movement;
-        int numTiles = 1;
-        activeTiles.clear();
+        int horizontalTiles = 1;
+        List<Tile> activeTiles = new ArrayList<Tile>();
 
         for(int i = movement; i >= 0; --i)
         {
-            for(int j = -numTiles / 2; j <= numTiles / 2; ++j)
+            for(int j = -horizontalTiles / 2; j <= horizontalTiles / 2; ++j)
             {
-                if(!(startTile.column + j < 0 || startTile.column + j >= columns || startTile.row + i < 0 || startTile.row + i >= rows))
+                if(i > 0)
                 {
-                    activeTiles.add(tiles[startTile.column + j][startTile.row + i]);
+                    if(!isOutOfBounds(startTile.column + j, startTile.row + i)) activeTiles.add(tiles[startTile.column + j][startTile.row + i]);
+                    if(!isOutOfBounds(startTile.column + j, startTile.row - i)) activeTiles.add(tiles[startTile.column + j][startTile.row - i]);
                 }
-
-                if(!(startTile.column + j < 0 || startTile.column + j >= columns || startTile.row - i < 0 || startTile.row - i >= rows))
+                else
                 {
-                    activeTiles.add(tiles[startTile.column + j][startTile.row - i]);
+                    if(!isOutOfBounds(startTile.column + j, startTile.row)) activeTiles.add(tiles[startTile.column + j][startTile.row]);
                 }
             }
 
-            numTiles += 2;
+            horizontalTiles += 2;
         }
+
+        return activeTiles;
+    }
+
+    private boolean isOutOfBounds(int column, int row)
+    {
+        return column < 0 || column >= columns || row < 0 || row >= rows;
     }
 
     private Tile createTile(Vector2 position, float width, float height, int i, int j, Color fillColor, Color outlineColor)
