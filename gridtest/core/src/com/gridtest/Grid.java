@@ -20,6 +20,7 @@ public class Grid
     public int columns, rows;
     public float tileWidth, tileHeight;
     public Tile[][] tiles;
+    public List<Tile> activeTiles;
 
     public Grid(int columns, int rows, float tileWidth, float tileHeight, InputState inputState)
     {
@@ -29,6 +30,7 @@ public class Grid
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
         this.tiles = new Tile[columns][rows];
+        this.activeTiles = new ArrayList<Tile>();
 
         for(int i = 0; i < columns; ++i)
         {
@@ -43,14 +45,9 @@ public class Grid
 
         gridCursor = createGridCursor(tiles[0][0].position.cpy(), tileWidth, tileHeight, Color.CLEAR, Color.CLEAR);
 
-        unitController = new UnitController(units, tileWidth, tileHeight, inputState);
-    }
+        unitController = new UnitController(units, activeTiles, tileWidth, tileHeight, inputState);
 
-    public void update()
-    {
-        unitController.update();
-
-        List<Tile> activeTiles = getActiveTiles();
+        setActiveTiles();
 
         for(Tile tile : activeTiles)
         {
@@ -58,12 +55,23 @@ public class Grid
         }
     }
 
-    private List<Tile> getActiveTiles()
+    public void update()
+    {
+        //setActiveTiles();
+        unitController.update();
+
+//        for(Tile tile : activeTiles)
+//        {
+//            tile.shape.fillColor = Color.BLUE;
+//        }
+    }
+
+    private void setActiveTiles()
     {
         Tile startTile = activeUnit.startTile;
         int movement = activeUnit.movement;
         int horizontalTiles = 1;
-        List<Tile> activeTiles = new ArrayList<Tile>();
+        activeTiles.clear();
 
         for(int i = movement; i >= 0; --i)
         {
@@ -82,8 +90,6 @@ public class Grid
 
             horizontalTiles += 2;
         }
-
-        return activeTiles;
     }
 
     private boolean isOutOfBounds(int column, int row)

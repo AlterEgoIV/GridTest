@@ -2,6 +2,7 @@ package com.gridtest;
 
 import com.badlogic.gdx.Input;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,14 +11,16 @@ import java.util.List;
 public class UnitController
 {
     public List<Unit> units;
-    public Unit currentUnit;
+    public Unit unit;
     public float tileWidth, tileHeight;
     public InputState inputState;
+    public List<Tile> activeTiles;
 
-    public UnitController(List<Unit> units, float tileWidth, float tileHeight, InputState inputState)
+    public UnitController(List<Unit> units, List<Tile> activeTiles, float tileWidth, float tileHeight, InputState inputState)
     {
         this.units = units;
-        currentUnit = units.get(0);
+        this.activeTiles = activeTiles;
+        unit = units.get(0);
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
         this.inputState = inputState;
@@ -25,24 +28,31 @@ public class UnitController
 
     public void update()
     {
-        if(inputState.isDown(Input.Keys.UP))
-        {
-            currentUnit.position.y += tileHeight;
-        }
+        handleInput();
+    }
 
-        if(inputState.isDown(Input.Keys.DOWN))
-        {
-            currentUnit.position.y -= tileHeight;
-        }
+    private void handleInput()
+    {
+        if(inputState.isDown(Input.Keys.UP)) moveUnit(0, 1);
+        if(inputState.isDown(Input.Keys.DOWN)) moveUnit(0, -1);
+        if(inputState.isDown(Input.Keys.LEFT)) moveUnit(-1, 0);
+        if(inputState.isDown(Input.Keys.RIGHT)) moveUnit(1, 0);
+    }
 
-        if(inputState.isDown(Input.Keys.LEFT))
+    private void moveUnit(int columnOffset, int rowOffset)
+    {
+        for(Tile tile : activeTiles)
         {
-            currentUnit.position.x -= tileWidth;
+            if(tile.column == unit.currentTile.column + columnOffset && tile.row == unit.currentTile.row + rowOffset)
+            {
+                unit.position.set(tile.position);
+                unit.currentTile = tile;
+            }
         }
+    }
 
-        if(inputState.isDown(Input.Keys.RIGHT))
-        {
-            currentUnit.position.x += tileWidth;
-        }
+    public void setUnit(Unit unit)
+    {
+        this.unit = unit;
     }
 }
