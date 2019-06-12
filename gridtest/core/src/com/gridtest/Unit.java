@@ -9,6 +9,7 @@ public class Unit extends GameObject
 {
     public Tile startTile, currentTile;
     public int movement;
+    public float moveTime;
 
     public Unit(Vector2 position, float width, float height, Shape shape, Tile startTile, int movement)
     {
@@ -16,6 +17,7 @@ public class Unit extends GameObject
         this.startTile = startTile;
         this.currentTile = startTile;
         this.movement = movement;
+        this.moveTime = .2f;
     }
 
     @Override

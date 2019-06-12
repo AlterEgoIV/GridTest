@@ -40,30 +40,28 @@ public class Grid
             }
         }
 
-        units.add(createUnit(tiles[3][5].position.cpy(), tileWidth, tileHeight, Color.SCARLET, Color.CLEAR, tiles[3][5], 2));
+        units.add(createUnit(tiles[3][5].position.cpy(), tileWidth, tileHeight, Color.SCARLET, Color.CLEAR, tiles[3][5], 3));
         activeUnit = units.get(0);
 
         gridCursor = createGridCursor(tiles[0][0].position.cpy(), tileWidth, tileHeight, Color.CLEAR, Color.CLEAR);
 
-        unitController = new UnitController(units, activeTiles, tileWidth, tileHeight, inputState);
+        unitController = new UnitController(units, activeTiles, inputState);
+    }
+
+    public void update()
+    {
+        for(Tile tile : activeTiles)
+        {
+            tile.shape.fillColor = Color.SKY;
+        }
 
         setActiveTiles();
+        unitController.update();
 
         for(Tile tile : activeTiles)
         {
             tile.shape.fillColor = Color.BLUE;
         }
-    }
-
-    public void update()
-    {
-        //setActiveTiles();
-        unitController.update();
-
-//        for(Tile tile : activeTiles)
-//        {
-//            tile.shape.fillColor = Color.BLUE;
-//        }
     }
 
     private void setActiveTiles()
